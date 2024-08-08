@@ -9,6 +9,8 @@ public class CarController : MonoBehaviour
     public float carHorsePower;
     public TrailRenderer[] trails;
 
+    public SpriteRenderer spriteRenderer;
+
     float currentHorsePower;
     float torque = -150f;
     float speed, steeringAmount;
@@ -24,6 +26,8 @@ public class CarController : MonoBehaviour
     Rigidbody2D rb;
     public AudioSource driftAudioSource;
     AudioSource carEngine;
+
+    public Sprite[] carSprites;
 
     private void Awake()
     {

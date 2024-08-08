@@ -13,6 +13,7 @@ public class CanvasController : MonoBehaviour
     public GameObject menuCanvas;
     public GameObject tracksButtonsHolder;
     public GameObject raceTrackPrefab;
+    public GameObject carSelectionCanvas;
 
     public RaceTracksHolder raceTracksHolder;
 
@@ -77,6 +78,18 @@ public class CanvasController : MonoBehaviour
             raceTracksHolder.raceTracks[i].SetActive(false);
         }
         menuCanvas.SetActive(true);
+    }
+
+    public void Return()
+    {
+        carSelectionCanvas.SetActive(false);
+        menuCanvas.SetActive(true);
+    }
+
+    public void ChangeCharacter()
+    {
+        menuCanvas.SetActive(false);
+        carSelectionCanvas.SetActive(true);
     }
 
     public void ExitGame()
