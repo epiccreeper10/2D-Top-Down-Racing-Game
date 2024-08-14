@@ -31,7 +31,7 @@ public class CharacterSelection : MonoBehaviour
     
     public void RightButtonClick()
     {
-        if (characterNum == 8)
+        if (characterNum == 7)
         {
             return;
         }

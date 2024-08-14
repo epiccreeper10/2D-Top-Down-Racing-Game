@@ -20,6 +20,8 @@ public class CarController : MonoBehaviour
     float defaultDragValue = 1;
     bool inWater;
     bool inDrift;
+    bool boost;
+
     public bool wrongDirection { get; private set; }
     Vector2 waterVelocity;
 
@@ -70,7 +72,15 @@ public class CarController : MonoBehaviour
     {
         if (Input.GetButton("Accelerate"))
         {
-            rb.AddForce(transform.up * currentHorsePower);
+            if (boost)
+            {
+                rb.AddForce(transform.up * currentHorsePower * 5);
+                Debug.Log("Is Boosting");
+            }
+            else
+            {
+                rb.AddForce(transform.up * currentHorsePower);
+            }
         }
         else if(Input.GetButton("Break"))
         {
@@ -154,6 +164,11 @@ public class CarController : MonoBehaviour
             inWater = true;
             collision.GetComponent<AudioSource>().PlayOneShot(collision.GetComponent<AudioSource>().clip);
         }
+
+        else if (collision.CompareTag("Boost"))
+        {
+            boost = true;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -176,6 +191,11 @@ public class CarController : MonoBehaviour
         else if(collision.CompareTag("Water"))
         {
             inWater = false;
+        }
+
+        else if (collision.CompareTag("Boost"))
+        {
+            boost = false;
         }
     }
 }
