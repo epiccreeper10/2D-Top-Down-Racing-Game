@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
+    public delegate void GameStateChangeHandler();
+    public static event GameStateChangeHandler OnUseItem;
+    public static event GameStateChangeHandler OnGetItem;
+    public static event GameStateChangeHandler OnUpdateItem;
+
     public static CarController instance;
 
     public float carHorsePower;
     public TrailRenderer[] trails;
 
     public SpriteRenderer spriteRenderer;
+    public ItemBase itemController;
 
     float currentHorsePower;
     float torque = -150f;
@@ -21,6 +27,7 @@ public class CarController : MonoBehaviour
     bool inWater;
     bool inDrift;
     bool boost;
+    bool hasItem = true;
 
     public bool wrongDirection { get; private set; }
     Vector2 waterVelocity;
@@ -41,6 +48,7 @@ public class CarController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         carEngine = GetComponent<AudioSource>();
+        itemController = GetComponent<ItemBase>();
     }
 
     private void Update()
@@ -75,7 +83,6 @@ public class CarController : MonoBehaviour
             if (boost)
             {
                 rb.AddForce(transform.up * currentHorsePower * 5);
-                Debug.Log("Is Boosting");
             }
             else
             {
@@ -85,6 +92,14 @@ public class CarController : MonoBehaviour
         else if(Input.GetButton("Break"))
         {
             rb.AddForce(-transform.up * currentHorsePower / 2);
+        }
+        else if (Input.GetButton("UseItem"))
+        {
+            if (hasItem == true)
+            {
+                OnUseItem?.Invoke();
+                hasItem = false;
+            }
         }
 
         steeringAmount = IsDrivingForward() ? Input.GetAxis("Horizontal") : -Input.GetAxis("Horizontal");
@@ -118,6 +133,22 @@ public class CarController : MonoBehaviour
         UpdateDrag();
     }
 
+    public void ApplySpeedBoost(float boostMultiplier = 2, float boostDuration = 5)
+    {
+        StartCoroutine(SpeedBoostCoroutine(boostMultiplier, boostDuration));
+    }
+
+    private IEnumerator SpeedBoostCoroutine(float boostMultiplier, float boostDuration)
+    {
+        boost = true;
+        currentHorsePower *= boostMultiplier;
+
+        yield return new WaitForSeconds(boostDuration);
+
+        boost = false;
+        currentHorsePower = carHorsePower;
+    }
+
     private void UpdateDrag()
     {
         rb.drag = defaultDragValue;
@@ -139,6 +170,11 @@ public class CarController : MonoBehaviour
     private bool IsDrivingForward()
     {
         return Vector2.Dot(transform.up.normalized, rb.velocity.normalized) >= 0 ? true : false; 
+    }
+
+    public void UpdateItem()
+    {
+        OnUpdateItem?.Invoke();
     }
 
 
@@ -168,6 +204,16 @@ public class CarController : MonoBehaviour
         else if (collision.CompareTag("Boost"))
         {
             boost = true;
+        }
+
+        else if (collision.CompareTag("Item"))
+        {
+
+            itemController.ID = collision.GetComponent<Item>().ID;
+            Debug.Log("Item Controller ID Set to " + itemController.ID);
+            Destroy(collision.gameObject);
+            hasItem = true;
+            OnGetItem?.Invoke();
         }
     }
 

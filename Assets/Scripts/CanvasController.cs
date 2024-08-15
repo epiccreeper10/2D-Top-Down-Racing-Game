@@ -14,6 +14,8 @@ public class CanvasController : MonoBehaviour
     public GameObject tracksButtonsHolder;
     public GameObject raceTrackPrefab;
     public GameObject carSelectionCanvas;
+    public GameObject itemBox;
+    public GameObject itemBoxIcon;
 
     public RaceTracksHolder raceTracksHolder;
 
@@ -36,6 +38,16 @@ public class CanvasController : MonoBehaviour
             raceTrack.name = id.ToString();
             raceTrack.GetComponent<Button>().onClick.AddListener(() => LoadTrack(id));
         }
+    }
+
+    public void OnEnable()
+    {
+        CarController.OnUpdateItem += UpdateItemBox;
+    }
+
+    public void OnDisable()
+    {
+        CarController.OnUpdateItem -= UpdateItemBox;
     }
 
     private void Update()
@@ -90,6 +102,28 @@ public class CanvasController : MonoBehaviour
     {
         menuCanvas.SetActive(false);
         carSelectionCanvas.SetActive(true);
+    }
+
+    public void UpdateItemBox()
+    {
+        Debug.Log("CanvasItemBox Update Called");
+        int _ID = playerCar.GetComponent<CarController>().itemController.ID;
+        Debug.Log("_ID = " + _ID);
+        if (_ID <= 0)
+        {
+            itemBox.SetActive(false);
+            itemBoxIcon.SetActive(false);
+        }
+        else if (_ID > 0 && _ID < 6)
+        {
+            itemBox.SetActive(true);
+            itemBoxIcon.SetActive(true);
+        }
+        else
+        {
+            itemBox.SetActive(false);
+            itemBoxIcon.SetActive(false);
+        }
     }
 
     public void ExitGame()

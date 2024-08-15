@@ -30923,6 +30923,7 @@ GameObject:
   - component: {fileID: 1483186640}
   - component: {fileID: 1483186642}
   - component: {fileID: 1483186643}
+  - component: {fileID: 1483186644}
   m_Layer: 0
   m_Name: PlayerCar
   m_TagString: Player
@@ -31193,6 +31194,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1483186644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1483186637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bcf072dd4b54c942bfa0daf9719cacc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ID: 1
+  name:
+  - Item
+  - Debug
 --- !u!1 &1496930181
 GameObject:
   m_ObjectHideFlags: 0
