@@ -82,7 +82,7 @@ public class CarController : MonoBehaviour
         {
             if (boost)
             {
-                rb.AddForce(transform.up * currentHorsePower * 5);
+                rb.AddForce(transform.up * currentHorsePower);
             }
             else
             {
@@ -93,7 +93,7 @@ public class CarController : MonoBehaviour
         {
             rb.AddForce(-transform.up * currentHorsePower / 2);
         }
-        else if (Input.GetButton("UseItem"))
+        if (Input.GetButton("UseItem"))
         {
             if (hasItem == true)
             {
@@ -141,12 +141,12 @@ public class CarController : MonoBehaviour
     private IEnumerator SpeedBoostCoroutine(float boostMultiplier, float boostDuration)
     {
         boost = true;
-        currentHorsePower *= boostMultiplier;
+        carHorsePower *= boostMultiplier;
 
         yield return new WaitForSeconds(boostDuration);
 
         boost = false;
-        currentHorsePower = carHorsePower;
+        carHorsePower = 6;
     }
 
     private void UpdateDrag()
@@ -203,6 +203,7 @@ public class CarController : MonoBehaviour
 
         else if (collision.CompareTag("Boost"))
         {
+            carHorsePower *= 3.5f;
             boost = true;
         }
 
@@ -242,6 +243,7 @@ public class CarController : MonoBehaviour
         else if (collision.CompareTag("Boost"))
         {
             boost = false;
+            carHorsePower = 6f;
         }
     }
 
