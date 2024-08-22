@@ -244,4 +244,22 @@ public class CarController : MonoBehaviour
             boost = false;
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Wall"))
+        {
+
+            // Calculate bounce direction
+            Vector2 bounceDirection = Vector2.Reflect(rb.velocity.normalized, collision.contacts[0].normal);
+
+            // Apply bounce force
+            rb.velocity = bounceDirection * rb.velocity.magnitude * 1f;
+
+            float torqueDirection = Vector3.Cross(collision.contacts[0].normal, rb.velocity).z > 0 ? -1f : 1f;
+
+            //Apply a small torque to simulate car rotation on impact
+            rb.AddTorque(torqueDirection * 50f);
+        }
+    }
 }
