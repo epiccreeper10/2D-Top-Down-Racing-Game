@@ -34,10 +34,18 @@ public class ItemBase : MonoBehaviour
         {
 
             Debug.Log("Use Item Called.");
-            if (ID == 1)
-            {
-                carController.ApplySpeedBoost();
-                ID = 0;
+            switch(ID){
+                case 1:
+                    carController.ApplySpeedBoost(8f, .3f);
+                    ID = 0;
+                    break;
+                case 2:
+                    carController.ApplySpeedBoost(1.3f, 12f);
+                    ID = 0;
+                    break;
+                default:
+                    ID = 0;
+                    break;
             }
         }
         carController.UpdateItem();
