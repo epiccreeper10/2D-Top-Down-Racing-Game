@@ -22932,7 +22932,7 @@ GameObject:
   - component: {fileID: 1011101615}
   m_Layer: 0
   m_Name: RaceTrack0
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -39560,6 +39560,7 @@ MonoBehaviour:
   - {fileID: 306484985}
   - {fileID: 1434041972}
   spriteRenderer: {fileID: 1483186638}
+  itemController: {fileID: 0}
   driftAudioSource: {fileID: 2147070757}
   carSprites:
   - {fileID: 21300000, guid: 9022f4747f0c1824f96338aa0250f40c, type: 3}
@@ -43633,6 +43634,8 @@ MonoBehaviour:
   raceTrackPrefab: {fileID: 1692875710198776902, guid: b01fab0ceb8972f4680bd24f6a7a525d,
     type: 3}
   carSelectionCanvas: {fileID: 1742953121}
+  itemBox: {fileID: 0}
+  itemBoxIcon: {fileID: 0}
   raceTracksHolder: {fileID: 1998535268}
 --- !u!1 &2147070755
 GameObject:
