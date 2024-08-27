@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class CanvasController : MonoBehaviour
 {
+    public delegate void GameStateChangeHandler();
+    public static event GameStateChangeHandler OnResetRace;
+
     public static int RaceId = 0;
 
     public GameObject playerCar;
@@ -81,6 +84,7 @@ public class CanvasController : MonoBehaviour
 
     private void QuitToMenu()
     {
+        OnResetRace?.Invoke();
         RaceController.instance?.ResetRace();
         OpenWorldController.instance.world.SetActive(false);
         raceCanvas.SetActive(false);

@@ -27,7 +27,7 @@ public class CarController : MonoBehaviour
     bool inWater;
     bool inDrift;
     bool boost;
-    bool hasItem = true;
+    bool hasItem = false;
 
     public bool wrongDirection { get; private set; }
     Vector2 waterVelocity;
@@ -49,6 +49,11 @@ public class CarController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         carEngine = GetComponent<AudioSource>();
         itemController = GetComponent<ItemBase>();
+    }
+
+    private void OnEnable()
+    {
+        CanvasController.OnResetRace += ResetCar;
     }
 
     private void Update()
@@ -259,7 +264,17 @@ public class CarController : MonoBehaviour
             float torqueDirection = Vector3.Cross(collision.contacts[0].normal, rb.velocity).z > 0 ? -1f : 1f;
 
             //Apply a small torque to simulate car rotation on impact
-            rb.AddTorque(torqueDirection * 50f);
+            rb.AddTorque(torqueDirection * 20f);
         }
+    }
+
+    private void ResetCar()
+    {
+        torque = -150f;
+        driftSticky = 0.6f;
+        driftSlippy = 1f;
+        maxStickyVelocity = 0.7f;
+        defaultDragValue = 1;
+        hasItem = false;
     }
 }
