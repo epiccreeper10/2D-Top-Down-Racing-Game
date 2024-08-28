@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class RaceController : MonoBehaviour
 {
+
     public static RaceController instance;
 
     public TextMeshProUGUI timer;
