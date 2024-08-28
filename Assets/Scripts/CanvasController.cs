@@ -69,6 +69,8 @@ public class CanvasController : MonoBehaviour
         raceTracksHolder.raceTracks[id].SetActive(true);
         menuCanvas.SetActive(false);
         raceCanvas.SetActive(true);
+        itemBox.SetActive(false);
+        itemBoxIcon.SetActive(false);
         OpenWorldController.instance.ChangeRaceUIvisibility(true);
         RaceController.instance.OnRaceEnable();
     }

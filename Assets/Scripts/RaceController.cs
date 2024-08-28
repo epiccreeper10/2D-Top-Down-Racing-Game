@@ -10,10 +10,12 @@ public class RaceController : MonoBehaviour
 
     public TextMeshProUGUI timer;
     public TextMeshProUGUI bestTime;
+    public TextMeshProUGUI lastTime;
     public TextMeshProUGUI wrongDirection;
     private float raceTime;
     public bool raceStarted { get; private set; }
     private float bestRaceTime;
+    private float lastRaceTime;
 
     int raceMinutes;
     int raceSeconds;
@@ -26,6 +28,16 @@ public class RaceController : MonoBehaviour
         {
             bestRaceTime = value;
             PlayerPrefs.SetFloat("BestRace" + CanvasController.RaceId, value);
+        }
+    }
+
+    public float LastRaceTime
+    {
+        get => lastRaceTime;
+        set
+        {
+            lastRaceTime = value;
+            PlayerPrefs.SetFloat("LastRace" + CanvasController.RaceId, value);
         }
     }
 
@@ -60,7 +72,9 @@ public class RaceController : MonoBehaviour
         {
             BestRaceTime = raceTime;
             SetBestRaceText();
-        }        
+        }
+        LastRaceTime = raceTime;
+        SetLastRaceText();        
         wrongDirection.enabled = false;
         raceStarted = false;
         //Set raceStarted with delay so player can se he's previous time
@@ -79,6 +93,14 @@ public class RaceController : MonoBehaviour
         int seconds = Mathf.FloorToInt(BestRaceTime - minutes * 60);
         float miliseconds = (BestRaceTime - minutes * 60 - seconds) * 1000;
         bestTime.text = "Best - " + string.Format("{0:0}:{1:00}:{2:000}", minutes, seconds, miliseconds);
+    }
+
+    private void SetLastRaceText()
+    {
+        int minutes = Mathf.FloorToInt(LastRaceTime / 60F);
+        int seconds = Mathf.FloorToInt(LastRaceTime - minutes * 60);
+        float miliseconds = (LastRaceTime - minutes * 60 - seconds) * 1000;
+        lastTime.text = "Last - " + string.Format("{0:0}:{1:00}:{2:000}", minutes, seconds, miliseconds);
     }
 
     public void ResetRace()
