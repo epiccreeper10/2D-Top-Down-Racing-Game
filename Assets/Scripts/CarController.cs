@@ -17,22 +17,25 @@ public class CarController : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     public ItemBase itemController;
 
-    float currentHorsePower;
+    public float currentHorsePower;
     float torque = -150f;
-    float speed, steeringAmount;
+    public float speed, steeringAmount;
     float driftSticky = 0.6f;
     float driftSlippy = 1f;
     float maxStickyVelocity = 0.7f;
     float defaultDragValue = 1;
-    bool inWater;
+    public float driftFactor;
+    public bool inWater;
     bool inDrift;
-    bool boost;
-    bool hasItem = false;
+
+    public bool boost;
+    public bool hasItem = false;
+
 
     public bool wrongDirection { get; private set; }
     Vector2 waterVelocity;
 
-    Rigidbody2D rb;
+    public Rigidbody2D rb;
     public AudioSource driftAudioSource;
     AudioSource carEngine;
 
@@ -85,35 +88,63 @@ public class CarController : MonoBehaviour
     {
         if (Input.GetButton("Accelerate"))
         {
-            if (boost)
-            {
-                rb.AddForce(transform.up * currentHorsePower);
-            }
-            else
-            {
-                rb.AddForce(transform.up * currentHorsePower);
-            }
+            HandleAcceleration();
         }
-        else if(Input.GetButton("Break"))
+        else 
         {
-            rb.AddForce(-transform.up * currentHorsePower / 2);
+            if (Input.GetButton("Break"))
+            {
+                HandleBraking();
+            }
         }
         if (Input.GetButton("UseItem"))
         {
-            if (hasItem == true)
-            {
-                OnUseItem?.Invoke();
-                hasItem = false;
-            }
+            HandleItemUsage();
         }
+        HandleSteering();
+        HandleDrifting();
+        HandleSubmerged();
+        UpdateVelocity();
+        UpdateDrift();
+        UpdateDrag();
+    }
 
+    public void HandleAcceleration()
+    {
+        if (boost)
+        {
+            rb.AddForce(transform.up * currentHorsePower);
+        }
+        else
+        {
+            rb.AddForce(transform.up * currentHorsePower);
+        }
+    }
+
+    void HandleBraking()
+    {
+        rb.AddForce(-transform.up * currentHorsePower / 2);
+    }
+
+    public void HandleItemUsage()
+    {
+        if (hasItem == true)
+        {
+            OnUseItem?.Invoke();
+            hasItem = false;
+        }
+    }
+
+    void HandleSteering()
+    {
         steeringAmount = IsDrivingForward() ? Input.GetAxis("Horizontal") : -Input.GetAxis("Horizontal");
-
         float t = Mathf.Lerp(0, torque, rb.velocity.magnitude);
         rb.angularVelocity = steeringAmount * t;
+    }
 
-
-        float driftFactor = RightVelocty().magnitude > maxStickyVelocity ? driftSlippy : driftSticky;
+    void HandleDrifting()
+    {
+        driftFactor = RightVelocty().magnitude > maxStickyVelocity ? driftSlippy : driftSticky;
         if (Input.GetButton("HandBreak"))
         {
             driftFactor = driftSlippy;
@@ -124,18 +155,26 @@ public class CarController : MonoBehaviour
         {
             currentHorsePower = carHorsePower;
         }
+    }
 
+    public void HandleSubmerged()
+    {
         waterVelocity = Vector2.zero;
         if (inWater)
         {
             driftFactor = driftSticky;
             waterVelocity = -Vector2.up * 0.07f;
         }
+    }
 
+    void UpdateVelocity()
+    {
         rb.velocity = ForwardVelocity() + RightVelocty() * driftFactor + waterVelocity;
+    }
 
+    void UpdateDrift()
+    {
         inDrift = driftFactor == driftSlippy ? true : false;
-        UpdateDrag();
     }
 
     public void ApplySpeedBoost(float boostMultiplier = 2, float boostDuration = 5)
@@ -252,7 +291,7 @@ public class CarController : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Wall"))
         {
