@@ -20,6 +20,8 @@ public class CanvasController : MonoBehaviour
     public GameObject itemBox;
     public GameObject itemBoxIcon;
 
+    public Sprite[] itemSprites;
+
     public RaceTracksHolder raceTracksHolder;
 
     private void Awake()
@@ -122,6 +124,14 @@ public class CanvasController : MonoBehaviour
         {
             itemBox.SetActive(true);
             itemBoxIcon.SetActive(true);
+            if (_ID == 1)
+            {
+                itemBoxIcon.GetComponent<Image>().sprite = itemSprites[0];
+            }
+            else if (_ID == 2)
+            {
+                itemBoxIcon.GetComponent<Image>().sprite = itemSprites[1];
+            }
         }
         else
         {

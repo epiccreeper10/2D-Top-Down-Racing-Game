@@ -217,7 +217,7 @@ public class CarController : MonoBehaviour
 
             itemController.ID = collision.GetComponent<Item>().ID;
             Debug.Log("Item Controller ID Set to " + itemController.ID);
-            Destroy(collision.gameObject);
+            collision.GetComponent<Item>().UseItem();
             hasItem = true;
             OnGetItem?.Invoke();
         }
