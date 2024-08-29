@@ -3,7 +3,7 @@ using UnityEngine.TestTools;
 using NUnit.Framework;
 using System.Collections;
 
-public class TilemapCollisionTests : MonoBehaviour
+public class CarControllerTests : MonoBehaviour
 {
     private GameObject rigidbodyObject;
     private Rigidbody2D rb;
@@ -60,7 +60,7 @@ public class TilemapCollisionTests : MonoBehaviour
         carController.rb = rb;
 
         var startingVelocity = rb.velocity;
-        carController.boost = true;
+        carController.boost = false;
         carController.currentHorsePower = 10f;
         carController.HandleAcceleration();
         yield return null;
